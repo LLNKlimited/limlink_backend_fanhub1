@@ -9,6 +9,11 @@ const VAPID_PUBLIC_KEY  = process.env.VAPID_PUBLIC_KEY;
 const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY;
 const VAPID_CONTACT_EMAIL = process.env.VAPID_CONTACT_EMAIL;
 
+const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY || 'your-public-key-here';
+const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY || 'your-private-key-here';
+const VAPID_CONTACT_EMAIL = process.env.VAPID_CONTACT_EMAIL || 'mailto:rick@llnklimited.com';
+
+
 if (!VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY || !VAPID_CONTACT_EMAIL) {
   throw new Error('VAPID keys or contact email not found in environment variables!');
 }

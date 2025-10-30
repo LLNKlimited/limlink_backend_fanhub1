@@ -1,9 +1,11 @@
-// Optional: load .env only if it exists (for local dev)
-// Comment out or remove for Render
-try {
-  require('dotenv').config();
-} catch (err) {
-  console.log('No .env file found, using environment variables');
+// Optional: load .env for local development only
+if (process.env.NODE_ENV !== 'production') {
+  try {
+    require('dotenv').config();
+    console.log('Loaded .env for local development');
+  } catch (err) {
+    console.log('No .env file found, relying on environment variables');
+  }
 }
 
 const express = require('express');
@@ -14,6 +16,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
+const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY;
 
 // Middleware
 app.use(cors());
@@ -23,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static HTML and assets from /views
 app.use(express.static(path.join(__dirname, 'views')));
 
-// Serve sw.js explicitly from /views
+// Serve sw.js explicitly
 app.get('/sw.js', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'views', 'sw.js'));
 });
@@ -42,15 +45,10 @@ app.use('/api/push_subscriptions', require('./routes/api/push_subscriptions'));
 
 // Expose VAPID public key for push subscriptions
 app.get('/vapidPublicKey', (req, res) => {
-  res.send(process.env.VAPID_PUBLIC_KEY);
+  res.send(VAPID_PUBLIC_KEY);
 });
 
 // MongoDB Connection + Server Start
-if (!MONGO_URI) {
-  console.error('❌ MONGO_URI environment variable is not set');
-  process.exit(1);
-}
-
 mongoose.set('strictQuery', true);
 mongoose.connect(MONGO_URI)
   .then(() => {
@@ -62,3 +60,4 @@ mongoose.connect(MONGO_URI)
   .catch(err => {
     console.error('❌ MongoDB connection error:', err);
   });
+

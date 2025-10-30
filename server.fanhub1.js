@@ -1,22 +1,25 @@
-// Optional: load .env for local development only
-if (process.env.NODE_ENV !== 'production') {
-  try {
-    require('dotenv').config();
-    console.log('Loaded .env for local development');
-  } catch (err) {
-    console.log('No .env file found, relying on environment variables');
-  }
-}
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const webPush = require('web-push');
+
+// --- Hardcoded VAPID keys ---
+const VAPID_PUBLIC_KEY = 'BCgC2F9WcQXA96e5_TUH5pyos2PiUOP822vVp-rmw38fh-CydZGnOJbzzYE8IW3ZSZ3kFCN1A_fku7YT4_EoH04';
+const VAPID_PRIVATE_KEY = 'QT_Qu_0lmGlDHMtFclmiqyM5pjlpcdgDVIcmN6Zb5jM';
+const VAPID_CONTACT_EMAIL = 'mailto:rick@llnklimited.com';
+
+// Initialize web-push
+webPush.setVapidDetails(
+  VAPID_CONTACT_EMAIL,
+  VAPID_PUBLIC_KEY,
+  VAPID_PRIVATE_KEY
+);
+console.log('✅ web-push initialized with VAPID keys');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const MONGO_URI = process.env.MONGO_URI;
-const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY;
+const PORT = 3000; // or any port you want
+const MONGO_URI = 'YOUR_MONGO_URI_HERE'; // hardcode or keep environment variable if you prefer
 
 // Middleware
 app.use(cors());
@@ -60,4 +63,3 @@ mongoose.connect(MONGO_URI)
   .catch(err => {
     console.error('❌ MongoDB connection error:', err);
   });
-

@@ -1,0 +1,3 @@
+ENCODE THIS IN THE QR CODE!!!
+
+"https://yourdomain.com/optin_sms.html?data={"phone":"5551234567","offerid":"SHOW123","response":true}"

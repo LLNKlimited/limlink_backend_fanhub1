@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🎁 FanHub Special Offer</title>
+</head>
+<body>
+  <h1>🎁 Special Offer Just for You</h1>
+  <p>Thanks for scanning the QR code!</p>
+
+ <form action="/api/optin_offer1" method="POST">
+  <label>Phone:</label><br>
+  <input type="text" name="phone" required><br><br>
+
+  <label>Email:</label><br>
+  <input type="email" name="email" required><br><br>
+
+  <label><input type="checkbox" name="tipClicked"> Sent Tip</label><br>
+  <label><input type="checkbox" name="downloadClicked"> Downloaded Song</label><br><br>
+
+  <button type="submit">Submit</button>
+</form>
+
+
+  <div id="response"></div>
+
+  <script>
+    document.getElementById('offerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {};
+
+      Array.from(form.elements).forEach(input => {
+        if (!input.name) return;
+        if (input.type === 'checkbox') {
+          data[input.name] = input.checked;
+        } else {
+          data[input.name] = input.value.trim();
+        }
+      });
+
+    
+        const result = await res.json();
+        document.getElementById('response').textContent = result.message || '✅ Submitted!';
+      } catch (err) {
+        window.location.href = '/thank_you_error.html';  // fallback error page
+      }
+    });
+  </script>
+</body>
+</html>

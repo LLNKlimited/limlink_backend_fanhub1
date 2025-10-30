@@ -1,0 +1,10 @@
+# Stage your files (make sure paths & extensions are correct)
+git add .\models\optin_push1.js
+git add .\routes\api\optin_push1.js
+git add .\server.optin_push1.js
+
+# Commit with a message
+git commit -m "Add optin_push1 model, route, and server"
+
+# Push to your remote repo
+git push

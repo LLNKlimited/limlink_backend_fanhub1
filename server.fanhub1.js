@@ -1,4 +1,11 @@
-require('dotenv').config();
+// Optional: load .env only if it exists (for local dev)
+// Comment out or remove for Render
+try {
+  require('dotenv').config();
+} catch (err) {
+  console.log('No .env file found, using environment variables');
+}
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -27,17 +34,11 @@ app.get('/', (req, res) => {
 });
 
 // API Routes
-const signup1Route = require('./routes/api/signup1');
-const optinPush1Route = require('./routes/api/optin_push1');
-const eventSMSRoute = require('./routes/api/optin_event_sms');
-const pushSubscriptionsRoute = require('./routes/api/push_subscriptions');
-const optinOffer1Route = require('./routes/api/optin_offer1');
-
-app.use('/api/signup1', signup1Route);
-app.use('/api/optin_push1', optinPush1Route);
-app.use('/api/event_sms', eventSMSRoute);
-app.use('/api/optin_offer1', optinOffer1Route);
-app.use('/api/push_subscriptions', pushSubscriptionsRoute);
+app.use('/api/signup1', require('./routes/api/signup1'));
+app.use('/api/optin_push1', require('./routes/api/optin_push1'));
+app.use('/api/event_sms', require('./routes/api/optin_event_sms'));
+app.use('/api/optin_offer1', require('./routes/api/optin_offer1'));
+app.use('/api/push_subscriptions', require('./routes/api/push_subscriptions'));
 
 // Expose VAPID public key for push subscriptions
 app.get('/vapidPublicKey', (req, res) => {
@@ -46,7 +47,7 @@ app.get('/vapidPublicKey', (req, res) => {
 
 // MongoDB Connection + Server Start
 if (!MONGO_URI) {
-  console.error('❌ MONGO_URI is not set in .env');
+  console.error('❌ MONGO_URI environment variable is not set');
   process.exit(1);
 }
 
